@@ -3,20 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Enma Designs</title>
+<title>Enmanuel Valera | Enma Designs</title>
 <meta name="description" content="Portafolio de diseño gráfico: logotipos, identidad visual, branding y flyers.">
 <meta name="theme-color" content="#0b0c0d">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Enma Designs | Portafolio de diseño gráfico">
-<meta property="og:description" content="Logotipos, identidad visual, branding y flyers. Mira mi portafolio.">
+<meta property="og:title" content="Enmanuel Valera | Enma Designs, diseñador gráfico">
+<meta property="og:description" content="Diseñador gráfico: logotipos, identidad visual, branding y flyers. Mira mi portafolio.">
 <meta property="og:image" content="https://TU-DOMINIO.vercel.app/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-<script>if(!matchMedia("(prefers-reduced-motion:reduce)").matches){document.documentElement.classList.add("intro");setTimeout(function(){document.documentElement.classList.remove("intro")},8000)}</script>
+<script>if(!matchMedia("(prefers-reduced-motion:reduce)").matches&&!/^#proyecto-/.test(location.hash)){document.documentElement.classList.add("intro");setTimeout(function(){document.documentElement.classList.remove("intro")},8000)}</script>
 <link rel="stylesheet" href="css/styles.css">
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)}</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <div id="intro" role="status" aria-label="Cargando">
@@ -36,7 +38,7 @@
   <a href="#inicio" class="brand" aria-label="Inicio"><img src="assets/isotipo-blanco.png" alt="" width="38" height="38"><span data-c="marca"></span></a>
   <button class="burger" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span></button>
   <nav id="menu">
-    <a href="#sobre-mi">Sobre mí</a><a href="#servicios">Servicios</a><a href="#proyectos">Proyectos</a><a href="#galeria">Galería</a>
+    <a href="#sobre-mi">Sobre mí</a><a href="#servicios">Servicios</a><a href="#proyectos">Proyectos</a><a href="#sitios-web" id="nav-sitios-web" hidden>Páginas web</a><a href="#galeria">Galería</a>
     <a href="#contacto" class="btn">Contacto</a>
   </nav>
 </header>
@@ -45,7 +47,8 @@
 <section class="hero wrap" id="inicio">
   <div class="hero-card">
     <div class="orb"><div class="ring3d"></div><div class="ring3d b"></div><img class="star" src="assets/asterisco.png" alt="" aria-hidden="true"></div>
-    <p class="hi">Hola, soy diseñador gráfico y creo <span class="swap" id="swap"></span></p>
+    <p class="avail" id="avail" hidden><i></i><span data-c="disponible"></span></p>
+    <p class="hi">Hola, soy <b data-c="nombre"></b>, diseñador gráfico y creo <span class="swap" id="swap"></span></p>
     <h1><span class="ln"><i>Diseño</i></span><span class="ln"><i>con identidad</i></span><span class="ln"><i>propia.</i></span></h1>
     <p class="lead" data-c="intro"></p>
     <div class="cta"><a href="#proyectos" class="btn">Ver proyectos</a><a data-l="wa" class="btn o" target="_blank" rel="noopener">Escríbeme por WhatsApp</a></div>
@@ -53,6 +56,11 @@
 </section>
 
 <div class="strip" aria-hidden="true"><div id="marquee"></div></div>
+
+<section id="marcas" class="wrap marcas" hidden>
+  <p class="rv">Marcas con las que he trabajado</p>
+  <div class="rv" id="marcas-lista"></div>
+</section>
 
 <section id="sobre-mi" class="wrap about">
   <figure class="photo rv"><div id="foto" class="tilt"></div><img class="sticker" src="assets/asterisco.png" alt=""></figure>
@@ -64,15 +72,52 @@
   <div class="grid3" id="servicios-lista"></div>
 </section>
 
+<section id="paquetes" class="wrap" hidden>
+  <h2 class="rv">Paquetes</h2>
+  <p class="rv sub">Un punto de partida para cada necesidad. Todo se adapta a tu marca.</p>
+  <div class="grid3" id="paquetes-lista"></div>
+</section>
+
 <section id="proyectos" class="wrap">
   <h2 class="rv">Proyectos</h2>
   <div class="grid2" id="proyectos-lista"></div>
+</section>
+
+<section id="sitios-web" class="wrap" hidden>
+  <h2 class="rv">Páginas web</h2>
+  <p class="rv sub">Explora algunos de mis proyectos digitales y descubre cómo funcionan.</p>
+  <div class="web-grid" id="sitios-web-lista"></div>
 </section>
 
 <section id="galeria" class="wrap">
   <h2 class="rv">Más diseños</h2>
   <p class="rv sub">Flyers, piezas y animaciones de mis proyectos.</p>
   <div class="reel" id="reel"></div>
+</section>
+
+<section id="testimonios" class="wrap" hidden>
+  <h2 class="rv">Lo que dicen mis clientes</h2>
+  <div class="grid3" id="testimonios-lista"></div>
+</section>
+
+<section id="proceso" class="wrap" hidden>
+  <h2 class="rv">Así trabajamos</h2>
+  <div class="steps" id="proceso-lista"></div>
+  <div class="faq-wrap rv" id="faq"><h3>Preguntas frecuentes</h3><div id="faq-lista"></div></div>
+</section>
+
+<section id="cotizar" class="wrap">
+  <h2 class="rv">Cotiza tu proyecto</h2>
+  <p class="rv sub">Cuéntame lo básico y te escribo por WhatsApp con tu mensaje ya listo.</p>
+  <form id="cot" class="card rv" novalidate>
+    <label>Tu nombre<input name="nombre" autocomplete="name"></label>
+    <label>Tu negocio o marca<input name="negocio" autocomplete="organization"></label>
+    <fieldset><legend>¿Qué necesitas?</legend><div id="cot-chips" class="chips"></div></fieldset>
+    <label>¿Para cuándo lo necesitas?<select name="plazo" id="cot-plazo"></select></label>
+    <label class="full">Cuéntame más (opcional)<textarea name="detalle" rows="3"></textarea></label>
+    <p class="err full" id="cot-err" hidden></p>
+    <button class="btn full" type="submit">Enviar por WhatsApp</button>
+  </form>
 </section>
 
 <section class="ribbons" aria-hidden="true"><div class="rb a"><div class="mq" id="rbA"></div></div><div class="rb b"><div class="mq" id="rbB"></div></div></section>
@@ -89,21 +134,35 @@
     <h2>¿Tienes una marca por crear o mejorar?</h2>
     <p>Cuéntame tu idea y te respondo lo antes posible.</p>
     <a data-l="tel" class="phone" data-c="telefono"></a>
-    <div class="cta"><a data-l="wa" class="btn" target="_blank" rel="noopener">WhatsApp</a><a data-l="mail" class="btn o">Correo</a><a data-l="ig" class="btn o" target="_blank" rel="noopener">Instagram</a></div>
+    <div class="cta"><a data-l="wa" class="btn" target="_blank" rel="noopener">WhatsApp</a><a data-l="mail" class="btn o">Correo</a><a data-l="ig" class="btn o" target="_blank" rel="noopener">Instagram</a><a id="pdfbtn" class="btn o" hidden download>Descargar portafolio</a></div>
+  </div>
+</section>
+<section id="compartir" class="wrap">
+  <div class="card share rv">
+    <canvas id="qr" width="1024" height="1024" aria-label="Código QR de mi portafolio"></canvas>
+    <div>
+      <h3>Llévame contigo</h3>
+      <p>Escanea el código para abrir mi portafolio, o guarda mi contacto en tu teléfono con un toque.</p>
+      <div class="cta"><a id="vcf" class="btn">Guardar contacto</a><button id="qrdl" class="btn o" type="button">Descargar QR</button></div>
+    </div>
   </div>
 </section>
 </main>
 
 <dialog id="modal" aria-label="Detalle del proyecto"><button class="x" aria-label="Cerrar">✕</button><div id="modal-body"></div><div class="m-nav"><button data-d="-1">‹ Anterior</button><button data-d="1">Siguiente ›</button></div></dialog>
 
+<dialog id="web-modal" class="web-modal" aria-label="Vista previa de una página web"><button class="x" aria-label="Cerrar">✕</button><div id="web-modal-body"></div></dialog>
+
 <dialog id="lb" aria-label="Diseño ampliado"><button class="x" aria-label="Cerrar">✕</button><div id="lb-body"></div><div class="m-nav"><button data-d="-1" aria-label="Anterior">‹</button><button data-d="1" aria-label="Siguiente">›</button></div></dialog>
 
 <a class="fab" data-l="wa" target="_blank" rel="noopener">WhatsApp</a>
 
-<footer class="wrap foot"><img src="assets/logotipo-blanco.png" alt="Logotipo" height="90"><p>© <span id="anio"></span> <span data-c="marca"></span></p></footer>
+<footer class="wrap foot"><img src="assets/logotipo-blanco.png" alt="Logotipo" height="90"><p>© <span id="anio"></span> <span data-c="marca"></span> · <span data-c="nombre"></span></p></footer>
 
 <script src="js/config.js"></script>
 <script src="js/main.js"></script>
 <script src="js/intro.js"></script>
+<script src="js/qr.js"></script>
+<script src="js/extra.js"></script>
 </body>
 </html>

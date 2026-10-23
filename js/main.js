@@ -1,6 +1,6 @@
 const C = window.CONFIG, $ = s => document.querySelector(s);
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-document.title = C.marca + " | Portafolio de diseño gráfico";
+document.title = C.nombre + " | " + C.marca + ", diseñador gráfico";
 document.querySelectorAll("[data-c]").forEach(e => e.textContent = C[e.dataset.c]);
 $("#anio").textContent = new Date().getFullYear();
 
@@ -23,6 +23,62 @@ $("#proyectos-lista").innerHTML = P.map((p, i) => {
   const media = !c ? ph : isV(c) ? `<video src="${c}" muted loop playsinline autoplay preload="metadata"></video>` : `<img src="${c}" alt="" loading="lazy">`;
   return `<button class="proj rv" style="--i:${i % 2}" data-i="${i}" aria-label="Abrir ${p.titulo}"><div class="media">${media}<span class="plus">+</span></div><div class="meta"><h3>${p.titulo}</h3><span>${[p.categoria, p.anio].filter(Boolean).join(" · ")}</span></div></button>`;
 }).join("");
+
+/* ---- páginas web: portada, vista interactiva y capturas deslizables ---- */
+const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[ch]));
+const validWebURL = value => {
+  try {
+    const u = new URL(String(value || ""));
+    return ["http:", "https:"].includes(u.protocol) ? u.href : "";
+  } catch { return ""; }
+};
+const W = (Array.isArray(C.sitiosWeb) ? C.sitiosWeb : [])
+  .map(w => ({ ...w, url: validWebURL(w.url), capturas: Array.isArray(w.capturas) ? w.capturas : [], etiquetas: Array.isArray(w.etiquetas) ? w.etiquetas : [] }))
+  .filter(w => w.titulo && w.url);
+const webSection = $("#sitios-web"), webNav = $("#nav-sitios-web"), webList = $("#sitios-web-lista");
+if (W.length) {
+  webSection.hidden = false;
+  webNav.hidden = false;
+  webList.innerHTML = W.map((w, i) => {
+    const cover = w.portada ? (isV(w.portada)
+      ? `<video src="${escapeHTML(w.portada)}" muted loop playsinline autoplay preload="metadata"></video>`
+      : `<img src="${escapeHTML(w.portada)}" alt="Vista previa de ${escapeHTML(w.titulo)}" loading="lazy" decoding="async">`)
+      : `<div class="web-cover-placeholder"><span>WEB</span><b>${escapeHTML(w.titulo)}</b></div>`;
+    const tags = w.etiquetas.map(t => `<span class="web-tag">${escapeHTML(t)}</span>`).join("");
+    return `<article class="web-card rv" style="--i:${i % 2}">
+      <div class="web-card-media">${cover}<span class="web-card-mark">${escapeHTML(w.categoria || "Proyecto web")}</span></div>
+      <div class="web-card-content"><div class="web-card-heading"><h3>${escapeHTML(w.titulo)}</h3><span class="web-external-mark" aria-hidden="true">↗</span></div>
+      <p>${escapeHTML(w.descripcion || "Explora este proyecto web.")}</p>${tags ? `<div class="web-tags">${tags}</div>` : ""}
+      <div class="web-card-actions"><button class="btn o web-quick" type="button" data-web-i="${i}">Vista rápida <span aria-hidden="true">↗</span></button><a class="btn" href="${escapeHTML(w.url)}" target="_blank" rel="noopener noreferrer">Visitar sitio <span aria-hidden="true">↗</span></a></div></div>
+    </article>`;
+  }).join("");
+  if (reduce) webList.querySelectorAll(".rv").forEach(e => e.classList.add("in"));
+  else {
+    const webIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); webIO.unobserve(e.target); } }), { threshold: .15 });
+    webList.querySelectorAll(".rv").forEach(e => webIO.observe(e));
+  }
+}
+const webDlg = $("#web-modal"), webBody = $("#web-modal-body");
+function openWebProject(i) {
+  const w = W[i];
+  if (!w) return;
+  const coverTitle = escapeHTML(w.titulo);
+  const screenshotItems = w.capturas.filter(Boolean);
+  const screenshots = screenshotItems.length ? `<section class="web-captures" aria-label="Capturas del proyecto"><h3>Más detalles del diseño</h3><p>Desliza para ver otras pantallas.</p><div class="web-capture-track">${screenshotItems.map((src, j) => isV(src)
+    ? `<figure class="web-shot"><video src="${escapeHTML(src)}" controls playsinline preload="metadata" aria-label="Captura ${j + 1} de ${coverTitle}"></video></figure>`
+    : `<figure class="web-shot"><img src="${escapeHTML(src)}" alt="Captura ${j + 1} de ${coverTitle}" loading="lazy" decoding="async"></figure>`).join("")}</div></section>` : "";
+  const tags = w.etiquetas.map(t => `<span class="web-tag">${escapeHTML(t)}</span>`).join("");
+  webBody.innerHTML = `<div class="web-modal-intro"><span>${escapeHTML(w.categoria || "Proyecto web")}</span><h2>${coverTitle}</h2><p>${escapeHTML(w.descripcion || "Explora este proyecto web.")}</p>${tags ? `<div class="web-tags">${tags}</div>` : ""}<div class="cta"><a class="btn" href="${escapeHTML(w.url)}" target="_blank" rel="noopener noreferrer">Abrir sitio completo ↗</a></div></div>
+    <section class="web-live" aria-label="Vista interactiva"><div class="web-live-heading"><div><h3>Vista interactiva</h3><p>Prueba la página aquí. Algunos sitios no permiten mostrarse dentro de otra web.</p></div><a href="${escapeHTML(w.url)}" target="_blank" rel="noopener noreferrer">Abrir aparte ↗</a></div><div class="web-frame"><iframe src="${escapeHTML(w.url)}" title="Vista interactiva de ${coverTitle}" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox" allowfullscreen></iframe></div><p class="web-frame-note">¿No carga o se ve en blanco? Es una restricción del sitio visitado; usa el botón «Abrir sitio completo».</p></section>${screenshots}`;
+  if (!webDlg.open) { webDlg.showModal(); document.body.classList.add("lock"); }
+  webDlg.scrollTop = 0;
+}
+webList.addEventListener("click", e => {
+  const b = e.target.closest("[data-web-i]");
+  if (b) openWebProject(Number(b.dataset.webI));
+});
+webDlg.addEventListener("click", e => { if (e.target === webDlg || e.target.closest(".x")) webDlg.close(); });
+webDlg.addEventListener("close", () => { document.body.classList.remove("lock"); webBody.innerHTML = ""; });
 
 /* ---- galería en movimiento: dos filas en bucle + ampliar al tocar ---- */
 const reel = $("#reel"), lb = $("#lb"), lbBody = $("#lb-body"), M = C.muestras.map(x => typeof x === "string" ? { src: x } : x);
@@ -86,6 +142,18 @@ document.querySelectorAll("h2").forEach(t => {
   t.innerHTML = ws.map((w, k) => `<span class="w${k === ws.length - 1 ? " hl" : ""}" aria-hidden="true">${[...w].map(ch => `<span class="c" style="--n:${n++}">${ch}</span>`).join("")}</span>`).join(" ");
 });
 
+/* ---- secciones nuevas: paquetes, testimonios, proceso y preguntas ---- */
+const wa = t => `https://wa.me/${n}?text=${encodeURIComponent(t)}`, L2 = k => C[k] || [];
+const show = (id, list, html) => { if (list.length) { $(id).hidden = false; $(id + "-lista").innerHTML = html; } };
+const caso = p => { const x = [["El reto", p.reto], ["Lo que hice", p.solucion], ["El resultado", p.resultado]].filter(a => a[1]).map(a => `<div class="caso"><b>${a[0]}</b><p>${a[1]}</p></div>`).join(""); return x ? `<div class="casos">${x}</div>` : ""; };
+$("#avail").hidden = !C.disponible;
+if (C.pdf) { const b = $("#pdfbtn"); b.href = C.pdf; b.hidden = false; }
+show("#paquetes", L2("paquetes"), L2("paquetes").map((p, i) => `<div class="rv" style="--i:${i}"><article class="card tilt pk${p.etiqueta ? " top" : ""}"><h3>${p.nombre}${p.etiqueta ? `<small>${p.etiqueta}</small>` : ""}</h3><b class="price">${p.desde ? "Desde " + p.desde : "Consultar precio"}</b><ul>${(p.incluye || []).map(x => `<li>${x}</li>`).join("")}</ul><a class="btn" href="${wa(`Hola, me interesa el paquete ${p.nombre}.`)}" target="_blank" rel="noopener">Cotizar por WhatsApp</a></article></div>`).join(""));
+show("#testimonios", L2("testimonios"), L2("testimonios").map((t, i) => `<figure class="card rv" style="--i:${i}"><blockquote>“${t.texto}”</blockquote><figcaption><b>${t.nombre}</b>${t.negocio ? " · " + t.negocio : ""}</figcaption></figure>`).join(""));
+show("#proceso", L2("proceso"), L2("proceso").map((s, i) => `<div class="rv" style="--i:${i}"><article class="card step"><span>${String(i + 1).padStart(2, "0")}</span><h3>${s.titulo}</h3><p>${s.texto}</p>${s.tiempo ? `<em>${s.tiempo}</em>` : ""}</article></div>`).join(""));
+$("#faq").hidden = !L2("faq").length;
+$("#faq-lista").innerHTML = L2("faq").map(f => `<details><summary>${f.p}</summary><p>${f.r}</p></details>`).join("");
+
 const burger = $(".burger");
 burger.onclick = () => { const o = document.body.classList.toggle("menu"); burger.setAttribute("aria-expanded", o); };
 document.querySelectorAll("#menu a").forEach(a => a.addEventListener("click", () => { document.body.classList.remove("menu"); burger.setAttribute("aria-expanded", false); }));
@@ -103,7 +171,7 @@ let cur = 0;
 function openProject(i) {
   cur = (i + P.length) % P.length;
   const p = P[cur], items = p.galeria.length ? p.galeria : [p.portada].filter(Boolean);
-  body.innerHTML = `<div class="m-info"><span>${[p.categoria, p.anio].filter(Boolean).join(" · ")}</span><h3>${p.titulo}</h3><p>${p.descripcion || ""}</p>${p.enlace ? `<a class="btn" href="${p.enlace}" target="_blank" rel="noopener">Ver proyecto en línea</a>` : ""}</div><div class="m-media">${items.length ? items.map(f => isV(f) ? `<video src="${f}" controls playsinline preload="metadata"></video>` : `<img src="${f}" alt="${p.titulo}" loading="lazy">`).join("") : ph}</div>`;
+  body.innerHTML = `<div class="m-info"><span>${[p.categoria, p.anio].filter(Boolean).join(" · ")}</span><h3>${p.titulo}</h3><p>${p.descripcion || ""}</p>${caso(p)}<div class="cta"><a class="btn" href="${wa(`Hola, vi el proyecto ${p.titulo} en tu portafolio y quiero algo parecido.`)}" target="_blank" rel="noopener">Quiero algo así</a>${p.enlace ? `<a class="btn o" href="${p.enlace}" target="_blank" rel="noopener">Ver proyecto en línea</a>` : ""}</div></div><div class="m-media">${items.length ? items.map(f => isV(f) ? `<video src="${f}" controls playsinline preload="metadata"></video>` : `<img src="${f}" alt="${p.titulo}" loading="lazy">`).join("") : ph}</div>`;
   dlg.scrollTop = 0;
   if (!dlg.open) { dlg.showModal(); document.body.classList.add("lock"); }
 }
