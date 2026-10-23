@@ -90,25 +90,76 @@ if (M.length) {
     return `<div class="row${k % 2 ? " b" : ""} rv" style="--from:${k % 2 ? -14 : 14}vw"><div class="track">${set}${set}</div></div>`;
   }).join("");
   if (!reduce) {
-    const rows = [...reel.children].map((el, k) => ({ el, t: el.firstChild, dir: k % 2 ? 1 : -1, x: k % 2 ? -1 : 0, sp: 1, hov: false }));
-    rows.forEach(r => { r.el.onpointerenter = () => r.hov = true; r.el.onpointerleave = () => r.hov = false; });
-    let vis = false, last = scrollY, vel = 0;
-    new IntersectionObserver(e => vis = e[0].isIntersecting).observe(reel);
-    (function tick() {
-      if (vis) {
-        vel += (scrollY - last - vel) * .12; last = scrollY;
-        const sk = Math.max(-7, Math.min(7, -vel * .3));
-        rows.forEach(r => {
-          r.sp += (((r.hov && !lb.open) ? 0 : 1) - r.sp) * .07;
-          const w = r.t.scrollWidth / 2;
-          r.x += r.dir * (.7 * r.sp + Math.min(Math.abs(vel), 60) * .12);
-          if (r.x <= -w) r.x += w;
-          if (r.x > 0) r.x -= w;
-          r.t.style.transform = `translate3d(${r.x}px,0,0) skewX(${sk}deg)`;
-        });
-      } else last = scrollY;
-      requestAnimationFrame(tick);
-    })();
+    const isTouch = matchMedia("(hover: none), (pointer: coarse)").matches;
+    const rows = [...reel.children].map((el, k) => ({
+      el, t: el.firstChild, dir: k % 2 ? 1 : -1,
+      x: k % 2 ? -1 : 0, sp: 1, hov: false, w: 0
+    }));
+
+    // Mide la pista cuando cambia su tamaño, no en cada fotograma.
+    const measureTracks = () => rows.forEach(r => { r.w = r.t.scrollWidth / 2; });
+    measureTracks();
+    if ("ResizeObserver" in window) {
+      const trackSizer = new ResizeObserver(measureTracks);
+      rows.forEach(r => trackSizer.observe(r.t));
+    } else {
+      addEventListener("resize", measureTracks, { passive: true });
+      reel.querySelectorAll("img,video").forEach(m => {
+        m.addEventListener("load", measureTracks);
+        m.addEventListener("loadedmetadata", measureTracks);
+      });
+    }
+
+    if (!isTouch) {
+      rows.forEach(r => {
+        r.el.addEventListener("pointerenter", () => { r.hov = true; });
+        r.el.addEventListener("pointerleave", () => { r.hov = false; });
+      });
+    }
+
+    let visible = false, rafId = 0, lastFrame = 0, last = scrollY, vel = 0;
+    const stop = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = 0; lastFrame = 0; vel = 0;
+    };
+    const tick = now => {
+      rafId = 0;
+      if (!visible || document.hidden) return;
+      // Ajusta la velocidad a la frecuencia de pantalla (60/90/120 Hz).
+      const dt = lastFrame ? Math.min((now - lastFrame) / 16.667, 2) : 1;
+      lastFrame = now;
+      const currentScroll = scrollY;
+      if (!isTouch) vel += (currentScroll - last - vel) * .12;
+      last = currentScroll;
+      const sk = isTouch ? 0 : Math.max(-7, Math.min(7, -vel * .3));
+
+      rows.forEach(r => {
+        const target = (!isTouch && r.hov && !lb.open) ? 0 : 1;
+        r.sp += (target - r.sp) * Math.min(1, .07 * dt);
+        if (!r.w) return;
+        r.x += r.dir * (.7 * r.sp + (isTouch ? 0 : Math.min(Math.abs(vel), 60) * .12)) * dt;
+        if (r.x <= -r.w) r.x += r.w;
+        if (r.x > 0) r.x -= r.w;
+        r.t.style.transform = isTouch
+          ? `translate3d(${r.x.toFixed(2)}px,0,0)`
+          : `translate3d(${r.x.toFixed(2)}px,0,0) skewX(${sk.toFixed(2)}deg)`;
+      });
+      rafId = requestAnimationFrame(tick);
+    };
+    const start = () => {
+      if (visible && !document.hidden && !rafId) {
+        last = scrollY; lastFrame = 0;
+        rafId = requestAnimationFrame(tick);
+      }
+    };
+    const reelObserver = new IntersectionObserver(entries => {
+      visible = entries.some(e => e.isIntersecting);
+      if (visible) start(); else stop();
+    }, { rootMargin: "120px 0px" });
+    reelObserver.observe(reel);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stop(); else start();
+    });
   }
 }
 function openLb(i, from, dir = 0) {
