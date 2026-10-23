@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Enma Designs</title>
+<meta name="description" content="Portafolio de diseño gráfico: logotipos, identidad visual, branding y flyers.">
+<meta name="theme-color" content="#0b0c0d">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Enma Designs | Portafolio de diseño gráfico">
+<meta property="og:description" content="Logotipos, identidad visual, branding y flyers. Mira mi portafolio.">
+<meta property="og:image" content="https://TU-DOMINIO.vercel.app/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<script>if(!matchMedia("(prefers-reduced-motion:reduce)").matches){document.documentElement.classList.add("intro");setTimeout(function(){document.documentElement.classList.remove("intro")},8000)}</script>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="intro" role="status" aria-label="Cargando">
+  <svg class="i-svg" viewBox="0 0 512 512" aria-hidden="true">
+    <circle class="i-ring" cx="256.0" cy="256.0" r="215.0" stroke-width="82.0" pathLength="1"/>
+    <g class="i-fade">
+      <rect class="i-dash" x="107" y="235" width="129" height="42"/>
+      <image class="i-star" href="assets/asterisco.png" x="269" y="189" width="136" height="134"/>
+    </g>
+  </svg>
+  <p class="i-name"><i data-c="marca"></i></p>
+  <b id="cnt">00</b>
+  <button id="skip">Saltar</button>
+</div>
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i></div>
+<header class="nav">
+  <a href="#inicio" class="brand" aria-label="Inicio"><img src="assets/isotipo-blanco.png" alt="" width="38" height="38"><span data-c="marca"></span></a>
+  <button class="burger" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span></button>
+  <nav id="menu">
+    <a href="#sobre-mi">Sobre mí</a><a href="#servicios">Servicios</a><a href="#proyectos">Proyectos</a><a href="#galeria">Galería</a>
+    <a href="#contacto" class="btn">Contacto</a>
+  </nav>
+</header>
+
+<main>
+<section class="hero wrap" id="inicio">
+  <div class="hero-card">
+    <div class="orb"><div class="ring3d"></div><div class="ring3d b"></div><img class="star" src="assets/asterisco.png" alt="" aria-hidden="true"></div>
+    <p class="hi">Hola, soy diseñador gráfico y creo <span class="swap" id="swap"></span></p>
+    <h1><span class="ln"><i>Diseño</i></span><span class="ln"><i>con identidad</i></span><span class="ln"><i>propia.</i></span></h1>
+    <p class="lead" data-c="intro"></p>
+    <div class="cta"><a href="#proyectos" class="btn">Ver proyectos</a><a data-l="wa" class="btn o" target="_blank" rel="noopener">Escríbeme por WhatsApp</a></div>
+  </div>
+</section>
+
+<div class="strip" aria-hidden="true"><div id="marquee"></div></div>
+
+<section id="sobre-mi" class="wrap about">
+  <figure class="photo rv"><div id="foto" class="tilt"></div><img class="sticker" src="assets/asterisco.png" alt=""></figure>
+  <div class="rv"><h2>Detrás de cada marca hay una persona.</h2><div id="sobre"></div></div>
+</section>
+
+<section id="servicios" class="wrap">
+  <h2 class="rv">Cómo puedo ayudarte</h2>
+  <div class="grid3" id="servicios-lista"></div>
+</section>
+
+<section id="proyectos" class="wrap">
+  <h2 class="rv">Proyectos</h2>
+  <div class="grid2" id="proyectos-lista"></div>
+</section>
+
+<section id="galeria" class="wrap">
+  <h2 class="rv">Más diseños</h2>
+  <p class="rv sub">Flyers, piezas y animaciones de mis proyectos.</p>
+  <div class="reel" id="reel"></div>
+</section>
+
+<section class="ribbons" aria-hidden="true"><div class="rb a"><div class="mq" id="rbA"></div></div><div class="rb b"><div class="mq" id="rbB"></div></div></section>
+
+<section id="contacto" class="wrap">
+  <div class="contact rv">
+      <div class="iso" aria-hidden="true">
+    <div class="iso-in">
+      <span class="iso-orbit"></span>
+      <svg viewBox="0 0 512 512"><circle class="iso-ring" cx="256" cy="256" r="215" stroke-width="82" pathLength="1"/><rect class="iso-dash" x="107" y="235" width="129" height="42"/></svg>
+      <span class="iso-star"><img src="assets/asterisco.png" alt=""></span>
+    </div>
+  </div>
+    <h2>¿Tienes una marca por crear o mejorar?</h2>
+    <p>Cuéntame tu idea y te respondo lo antes posible.</p>
+    <a data-l="tel" class="phone" data-c="telefono"></a>
+    <div class="cta"><a data-l="wa" class="btn" target="_blank" rel="noopener">WhatsApp</a><a data-l="mail" class="btn o">Correo</a><a data-l="ig" class="btn o" target="_blank" rel="noopener">Instagram</a></div>
+  </div>
+</section>
+</main>
+
+<dialog id="modal" aria-label="Detalle del proyecto"><button class="x" aria-label="Cerrar">✕</button><div id="modal-body"></div><div class="m-nav"><button data-d="-1">‹ Anterior</button><button data-d="1">Siguiente ›</button></div></dialog>
+
+<dialog id="lb" aria-label="Diseño ampliado"><button class="x" aria-label="Cerrar">✕</button><div id="lb-body"></div><div class="m-nav"><button data-d="-1" aria-label="Anterior">‹</button><button data-d="1" aria-label="Siguiente">›</button></div></dialog>
+
+<a class="fab" data-l="wa" target="_blank" rel="noopener">WhatsApp</a>
+
+<footer class="wrap foot"><img src="assets/logotipo-blanco.png" alt="Logotipo" height="90"><p>© <span id="anio"></span> <span data-c="marca"></span></p></footer>
+
+<script src="js/config.js"></script>
+<script src="js/main.js"></script>
+<script src="js/intro.js"></script>
+</body>
+</html>
