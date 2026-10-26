@@ -70,14 +70,14 @@ window.CONFIG = {
     {
     titulo: "Tanquetuy Catálogo",
     categoria: "Catálogo web",
-    descripcion: "Nuestro cliente confío en nosotros para mostrar su catálogo de una manera mas organizada ocn pagina web sencilla, pero funcional.",
+    descripcion: "Nuestro cliente confió en nosotros para mostrar su catálogo de una manera más organizada, con una página web sencilla pero funcional.",
     url: "https://tutanquetuy.vercel.app/",
     portada: "assets/tanquetuy/web/portadawebtanquetuy.png",
     capturas: [
       "assets/tanquetuy/web/tanquetuycap1.png",
       "assets/tanquetuy/web/tanquetuycap2.png"
     ],
-    etiquetas: ["Catálogo, Pedidos por Whatsapp"]
+    etiquetas: ["Catálogo", "Pedidos por WhatsApp"]
   }
   ],
 
@@ -135,8 +135,11 @@ window.CONFIG = {
 
   /* MARCAS con las que has trabajado. Puedes poner solo el nombre, o con logo (PNG/SVG con fondo transparente):
      { nombre: "Cochi", logo: "assets/marcas/cochi.webp" }. Si lo dejas vacío, la franja no se muestra. */
-  marcas: ["Cochi Darkitchen", "Cochi Dulce", "Tanquetuy", "Aquito", "Qrico", "Risus Boutique", "Blink Comunity"],
+  marcas: ["Cochi Dark Kitchen", "Cochi Dulce", "Tanquetuy", "Aquito", "Qrico", "Risus Boutique", "Blink Comunity"],
 
   /* Opciones de "¿Para cuándo lo necesitas?" en el formulario de cotización */
-  plazos: ["Lo antes posible", "Esta semana", "Este mes", "Sin prisa"]
+  plazos: ["Lo antes posible", "Esta semana", "Este mes", "Sin prisa"],
+
+  /* HERRAMIENTAS que usas. Una palabra por herramienta. Borra la lista ([]) para ocultar la sección. */
+  herramientas: ["Illustrator", "Photoshop", "After Effects", "Premier Pro"]
 };

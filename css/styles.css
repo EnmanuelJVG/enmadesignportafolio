@@ -1,8 +1,7 @@
 :root{--bg:#0b0c0d;--card:#141617;--line:#262a2c;--tx:#f3f4f2;--mu:#98a0a3;--ac:#65f4e4;--r:28px;--rot:0deg}
 *{box-sizing:border-box;margin:0}
-html{scroll-behavior:smooth;scroll-padding-top:90px;background:var(--bg);overflow-x:clip}
-body{background:transparent;color:var(--tx);font:400 1.05rem/1.65 "Outfit",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip;max-width:100%}
-@supports not (overflow-x:clip){html,body{overflow-x:hidden}}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+html{background:var(--bg)}body{background:transparent;color:var(--tx);font:400 1.05rem/1.65 "Outfit",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img,video{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--ac);outline-offset:3px}
@@ -80,8 +79,6 @@ p{max-width:60ch;color:var(--mu)}
   .nav nav a{padding:1rem 0;font-size:1.3rem}.nav nav .btn{justify-content:center;margin-top:.5rem}
 }
 @media(max-width:560px){.grid3,.grid2{grid-template-columns:1fr}.star{width:80%;right:-25%}.hero-card{min-height:70vh}}
-/* Evita el pequeño desbordamiento lateral que puede causar 100vw en móviles. */
-@media(max-width:860px){.reel{width:calc(100% + 2.5rem);max-width:calc(100% + 2.5rem);margin-left:-1.25rem}.reel .row.rv,.reel .row.rv.in{transform:none;transition:opacity .45s ease}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.ln i{transform:none}.rv{opacity:1;transform:none}}
 
 /* ---- fondo animado ---- */
@@ -361,3 +358,30 @@ figcaption{color:var(--mu);font-size:.95rem}figcaption b{color:var(--ac)}
   .web-shot img,.web-shot video{height:58svh;min-height:300px}
 }
 @media(prefers-reduced-motion:reduce){.web-card,.web-card-media>img,.web-card-media>video{transition:none}}
+
+/* ---- pulido: sin movimiento lateral, menú, herramientas, progreso, modo ligero ---- */
+.reel{overflow:hidden;overflow:clip}
+@media(max-width:1060px){
+  .burger{display:block}
+  .nav nav{position:fixed;inset:64px 0 auto;flex-direction:column;align-items:stretch;gap:0;background:var(--bg);padding:.5rem 1.25rem 1.5rem;border-bottom:1px solid var(--line);transform:translateY(-130%);transition:transform .35s}
+  .menu .nav nav{transform:none}
+  .nav nav a{padding:1rem 0;font-size:1.3rem}
+  .nav nav .btn{justify-content:center;margin-top:.5rem}
+}
+.nav nav a.on:not(.btn){color:var(--ac)}
+.tools{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1rem}
+.tool{padding:.7rem 1.3rem;border:1px solid var(--line);border-radius:99px;font-weight:600;background:rgba(20,22,23,.6);transition:border-color .25s,color .25s}
+.tool:hover{border-color:var(--ac);color:var(--ac)}
+.progress{position:fixed;inset:0 0 auto;height:3px;z-index:60;pointer-events:none}
+.progress i{display:block;height:100%;background:var(--ac);transform:scaleX(0);transform-origin:left}
+.totop{position:fixed;left:1rem;bottom:calc(1rem + env(safe-area-inset-bottom,0px));z-index:30;width:48px;height:48px;border-radius:50%;border:1px solid #3a3f42;background:rgba(11,12,13,.85);color:var(--tx);font-size:1.3rem;cursor:pointer;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .3s,transform .3s,border-color .25s}
+.totop.show{opacity:1;pointer-events:auto;transform:none}
+.totop:hover{border-color:var(--ac);color:var(--ac)}
+html.intro .progress,html.intro .totop{display:none}
+.lite .bg i,.lite .ring3d,.lite .iso-in,.lite .iso-orbit,.lite .fab,.lite .mq,.lite #marquee,.lite .c{animation:none!important}
+.lite .c{opacity:1;transform:none}
+.lite *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.lite #lb{background:rgba(11,12,13,.94)}
+
+/* ---- sin desplazamiento lateral en celular ---- */
+main{overflow-x:hidden;overflow-x:clip}

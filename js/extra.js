@@ -51,3 +51,17 @@
   const vcf = ["BEGIN:VCARD", "VERSION:3.0", "N:" + np.slice(1).join(" ") + ";" + np[0] + ";;;", "FN:" + C.nombre, "ORG:" + C.marca, "TITLE:Diseñador gráfico", "TEL;TYPE=CELL:+" + n, "EMAIL:" + C.email, "URL:" + base, "END:VCARD"].join("\r\n");
   const a = $("#vcf"); a.href = "data:text/vcard;charset=utf-8," + encodeURIComponent(vcf); a.download = slug(C.nombre) + ".vcf";
 })();
+
+/* Pulido: herramientas, menú activo, barra de progreso y volver arriba */
+(() => {
+  const T = C.herramientas || [];
+  if (T.length) { $("#herramientas").hidden = false; $("#herramientas-lista").innerHTML = T.map(t => `<span class="tool">${t}</span>`).join(""); }
+  const links = [...document.querySelectorAll("#menu a[href^='#']")];
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id)); }), { rootMargin: "-45% 0px -50% 0px" });
+  links.forEach(a => { const s = document.querySelector(a.getAttribute("href")); if (s) io.observe(s); });
+  const bar = $(".progress i"), up = $(".totop"); let tk = false;
+  const upd = () => { const t = document.documentElement.scrollHeight - innerHeight; bar.style.transform = `scaleX(${t > 0 ? Math.min(1, scrollY / t) : 0})`; up.classList.toggle("show", scrollY > innerHeight * 1.2); tk = false; };
+  addEventListener("scroll", () => { if (!tk) { tk = true; requestAnimationFrame(upd); } }, { passive: true });
+  addEventListener("resize", upd); upd();
+  up.onclick = () => scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+})();
