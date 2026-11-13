@@ -1,6 +1,6 @@
 # Enma Designs | Portafolio de Enmanuel Valera
 
-Todo se edita en **`js/config.js`**. No hay que tocar el HTML.
+Todo se edita desde **`/admin`** (ver `ADMIN-SETUP.md`) o, como respaldo, en **`js/config.js`**. No hay que tocar el HTML.
 
 - **Datos de contacto:** `telefono`, `email`, `instagram`, `mensajeWhatsapp`
 - **Nombre y etiqueta:** `nombre`, `disponible` (pon "" para ocultarla)
